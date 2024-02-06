@@ -1,5 +1,5 @@
 // src/ChatBot.js
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { List, Input, Button } from 'antd';
 import ReactMarkdown from 'react-markdown';
 
@@ -7,13 +7,17 @@ const ChatBot = () => {
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState('');
 
+  useEffect(() => {
+    
+  }, []);
+
   const handleSend = () => {
     const question = { role: 'user', content: inputValue };
 
     const updatedMessages = [...messages, question]; // 先构造更新后的数组
     setMessages(updatedMessages);
     // 发送请求到后端API
-    fetch('http://127.0.0.1:5000/chat', {
+    fetch('http://47.97.117.242:5000/chat', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
