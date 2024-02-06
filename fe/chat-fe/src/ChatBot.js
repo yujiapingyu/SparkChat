@@ -57,7 +57,7 @@ const ChatBot = () => {
           value={inputValue}
           onChange={e => setInputValue(e.target.value)}
           onPressEnter={handleSend}
-          placeholder="输入消息..."
+          placeholder="输入消息...[Developed by Yujiaping. Using Xunfei Spark API.]"
           style={{ width: 'calc(100% - 100px)', marginRight: '10px' }}
         />
         <Button onClick={handleSend} type="primary">发送</Button>
