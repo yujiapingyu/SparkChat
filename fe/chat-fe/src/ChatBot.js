@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { List, Input, Button } from 'antd';
 import ReactMarkdown from 'react-markdown';
+import './ChatBot.css'
 
 const ChatBot = () => {
   const [messages, setMessages] = useState([]);
@@ -37,26 +38,30 @@ const ChatBot = () => {
   };
 
   return (
-    <div>
-      <List
-        dataSource={messages}
-        renderItem={item => (
-          <List.Item>
-            <List.Item.Meta
-              title={item.role === 'user' ? 'user' : 'assistant'}
-              description={<ReactMarkdown children={item.content} />}
-            />
-          </List.Item>
-        )}
-      />
-      <Input
-        value={inputValue}
-        onChange={e => setInputValue(e.target.value)}
-        onPressEnter={handleSend}
-        placeholder="输入消息..."
-        style={{ width: 'calc(100% - 100px)', marginRight: '10px' }}
-      />
-      <Button onClick={handleSend} type="primary">发送</Button>
+    <div className="chat-container">
+      <div className="message-list">
+        <List
+          dataSource={messages}
+          renderItem={item => (
+            <List.Item>
+              <List.Item.Meta
+                title={item.role === 'user' ? 'user' : 'assistant'}
+                description={<ReactMarkdown>{item.content}</ReactMarkdown>}
+              />
+            </List.Item>
+          )}
+        />
+      </div>
+      <div className="input-section">
+        <Input
+          value={inputValue}
+          onChange={e => setInputValue(e.target.value)}
+          onPressEnter={handleSend}
+          placeholder="输入消息..."
+          style={{ width: 'calc(100% - 100px)', marginRight: '10px' }}
+        />
+        <Button onClick={handleSend} type="primary">发送</Button>
+      </div>
     </div>
   );
 };

@@ -1,0 +1,20 @@
+/* ChatBot.css */
+.chat-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    /* 使用视口高度确保容器充满整个屏幕 */
+}
+
+.message-list {
+    flex: 1;
+    overflow-y: auto;
+    /* 允许消息列表滚动 */
+}
+
+.input-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 20px;
+}
