@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 from Spark.SparkApi import SparkApiClient  # 确保你有这个模块和类
 from flask_cors import CORS  # 导入CORS
 from config import appid, api_secret, api_key
+import time
 
 app = Flask(__name__)
 CORS(app)  # 为整个应用启用CORS
@@ -10,9 +11,32 @@ domain = "generalv2"    # v2.0版本
 Spark_url = "ws://spark-api.xf-yun.com/v3.5/chat"  # v1.5环境的地址
 
 client = SparkApiClient(appid, api_key, api_secret, Spark_url, domain)
+
+# 请求限制参数
+REQUEST_LIMIT = 100  # 每个IP每小时允许的最大请求次数
+requests_log = {}  # 存储IP请求计数和时间戳
+
+def is_rate_limited(ip_address):
+    current_time = time.time()
+    window_time = 3600  # 时间窗口为1小时
+
+    # 如果IP不在记录中或时间窗口已过，则重置计数
+    if ip_address not in requests_log or current_time - requests_log[ip_address][1] > window_time:
+        requests_log[ip_address] = [1, current_time]
+        return False
+    else:
+        count, _ = requests_log[ip_address]
+        if count >= REQUEST_LIMIT:
+            return True  # 超过限制，限流
+        else:
+            requests_log[ip_address][0] += 1  # 更新计数
+            return False
  
 @app.route('/chat', methods=['POST'])
 def chat():
+    ip_address = request.remote_addr  # 获取客户端IP地址
+    if is_rate_limited(ip_address):
+        return jsonify({"error": "Too many requests"}), 429  # 返回429 Too Many Requests错误
     data = request.json
     question = data.get('question', {})
     temp = []
